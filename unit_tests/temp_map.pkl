@@ -1,22 +1,2 @@
 (dp1
-S'irregardless of'
-p2
-S'regardless of'
-p3
-sS'existing entry 1'
-p4
-S'foo'
-p5
-sS'tomahto'
-p6
-S'tomato'
-p7
-sS'speshol'
-p8
-S'special'
-p9
-sS'existing entry 2'
-p10
-S'bar'
-p11
-s.
+.

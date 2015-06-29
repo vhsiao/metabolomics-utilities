@@ -20,6 +20,9 @@ class NameMap():
     def __len__(self):
         return self.name_map.__len__()
 
+    def __str__(self):
+        return '\n'.join(['{0}:{1}'.format(k, v) for k, v in self.name_map.items()])
+
     def clear(self):
         self.name_map = dict()
         self._commit()
@@ -56,13 +59,14 @@ class NameMap():
     def get_map_from_csv(self, name_map_csv_path):
         name_map_2 = dict()
         try:
-            with open(name_map_csv_path) as name_map_csv:
+            with open(name_map_csv_path, 'rU') as name_map_csv:
                 reader = csv.DictReader(name_map_csv)
                 try:
                     name_map_2 = {row['Query']: row['Match'] for row in reader}
                 except:
                     print('Had trouble adding entries from this name_map file. Double check the file {0}'
                           .format(name_map_csv_path))
+                    raise
         except IOError:
             print('Name map at path {0} missing or invalid. Returning empty map.'.format(name_map_csv_path))
             raise
@@ -77,6 +81,7 @@ class NameMap():
             self.map_pkl_path = map_pkl_path
         except IOError:
             self.map_pkl_path = 'temp_map.pkl'
+        self._commit()
 
 if __name__ == 'main':
     parser = argparse.ArgumentParser()
