@@ -16,11 +16,11 @@ class SimpleTestNameMapUtils(unittest.TestCase):
         pass
 
     def test_get_map_from_csv(self):
-        result_map = self.name_map.get_map_from_csv('./test_data/test_csv/test_map_tiny.csv')
+        result_map = self.name_map.get_map_from_csv('./test_data/test_map_csv/test_map_tiny.csv')
         self.assertDictEqual(result_map, {'speshul': 'special', 'tomahto': 'tomato', 'weird': 'unicorn', 'existing entry 1': 'not foo'})
 
     def test_add_mappings(self):
-        self.name_map.add_mappings('./test_data/test_csv/test_map_small.csv')
+        self.name_map.add_mappings('./test_data/test_map_csv/test_map_small.csv')
         self.assertEqual(self.name_map['speshul'], 'special')
         self.assertEqual(self.name_map['speshol'], 'special')
         self.assertEqual(self.name_map['irregardless of'], 'regardless of')
@@ -32,8 +32,8 @@ class SimpleTestNameMapUtils(unittest.TestCase):
 
 
     def test_remove_mappings(self):
-        self.name_map.add_mappings('test_data/test_csv/test_map_small.csv')
-        self.name_map.remove_mappings('test_data/test_csv/test_map_tiny.csv')
+        self.name_map.add_mappings('test_data/test_map_csv/test_map_small.csv')
+        self.name_map.remove_mappings('test_data/test_map_csv/test_map_tiny.csv')
         self.assertEqual(self.name_map['speshol'], 'special')
         self.assertFalse('speshul' in self.name_map)
         with open(self.name_map.map_pkl_path) as map_pkl:
@@ -51,6 +51,16 @@ class SimpleTestNameMapUtils(unittest.TestCase):
         with open(self.name_map.map_pkl_path) as map_pkl:
             loaded_map = pickle.load(map_pkl)
             self.assertEqual(len(loaded_map), 0)
+
+class TestNameUtils(unittest.TestCase):
+    def setUp(self):
+        self.name_map = NameMap('test_data/test_maps/test_map_0.pkl')
+
+    def test_add_mappings(self):
+        self.name_map.add_mappings('test_data/test_map_csv/test_map_0.csv')
+        print self.name_map
+        self.assertEqual(self.name_map['alanine'], 'Alanine')
+        self.assertEqual(self.name_map['anthranilate'], '2-Aminobenzoic acid')
 
 if __name__ == '__main__':
     unittest.main()

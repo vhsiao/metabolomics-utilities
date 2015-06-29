@@ -1,0 +1,70 @@
+(dp1
+S'alanine'
+p2
+S'Alanine'
+p3
+sS'3-methylphenylacetic acid'
+p4
+S'3-Methylphenylacetic acid'
+p5
+sS'anthranilate'
+p6
+S'2-Aminobenzoic acid'
+p7
+sS'hydroxyproline'
+p8
+S'4-Hydroxyproline'
+p9
+sS'sarcosine'
+p10
+S'Sarcosine'
+p11
+sS'thiamine'
+p12
+S'Thiamine'
+p13
+sS'Atrolactic acid'
+p14
+S'Phenylacetic acid'
+p15
+sS'threonine'
+p16
+S'L-Threonine'
+p17
+sS'histidine'
+p18
+S'L-Histidine'
+p19
+sS'allantoin'
+p20
+S'Allantoin'
+p21
+sS'lysine'
+p22
+S'L-Lysine'
+p23
+sS'myo-inositol'
+p24
+S'Myoinositol'
+p25
+sS'cystathionine'
+p26
+S'L-Cystathionine'
+p27
+sS'Kynurenic acid'
+p28
+S'Kynurenic acid'
+p29
+sS'methionine'
+p30
+S'L-Methionine'
+p31
+sS'glutamine'
+p32
+S'L-Glutamine'
+p33
+sS'cyclic-AMP'
+p34
+S'Cyclic AMP'
+p35
+s.
