@@ -16,10 +16,10 @@ class SimpleTestPrepDatasetForMetaboanalyst(unittest.TestCase):
 
     def test_standardize_compound_names(self):
         print '\n\ntest_standardize_compound_names'
-        original_fieldnames = ['alanine', 'hydroxyproline', 'sarcosine', 'glutamine', 'anthranilate', 'bunny']
+        original_fieldnames = ['alanine', 'hydroxyproline', 'sarcosine', 'glutamine', 'anthranilate', 'alanine-nega', 'bunny']
         result = standardize_compound_names(original_fieldnames, self.map_pkl_path)
         self.assertEqual(result,
-                    ['Alanine', '4-Hydroxyproline', 'Sarcosine', 'L-Glutamine', '2-Aminobenzoic acid', 'bunny'])
+                    ['Alanine', '4-Hydroxyproline', 'Sarcosine', 'L-Glutamine', '2-Aminobenzoic acid', 'Alanine', 'bunny'])
 
     def test_infer_label(self):
         print '\n\ntest_infer_label'
