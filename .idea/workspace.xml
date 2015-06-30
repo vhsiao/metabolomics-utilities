@@ -2,12 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="92be8758-49b1-4bab-bf35-0730dc6b56c0" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/unit_tests/test_data/test_datasets_csv/test_dataset_0.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/unit_tests/test_data/test_datasets_csv/~$test_dataset_0.xlsx" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/MetabolomicsUtilities.iml" afterPath="$PROJECT_DIR$/.idea/MetabolomicsUtilities.iml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/unit_tests/test_data/test_datasets_csv/test_dataset_0_cols_MA..csv" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/prep_dataset_for_metaboanalyst/__init__.py" afterPath="$PROJECT_DIR$/prep_dataset_for_metaboanalyst/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/unit_tests/test_data/test_datasets_csv/expected_prepared_test_dataset_0.csv" afterPath="$PROJECT_DIR$/unit_tests/test_data/test_datasets_csv/expected_prepared_test_dataset_0.csv" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/unit_tests/test_prep_dataset_for_metaboanalyst.py" afterPath="$PROJECT_DIR$/unit_tests/test_prep_dataset_for_metaboanalyst.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="MetabolomicsUtilities.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -44,20 +42,10 @@
         <entry file="file://$PROJECT_DIR$/unit_tests/test_prep_dataset_for_metaboanalyst.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="81" column="20" selection-start-line="81" selection-start-column="20" selection-end-line="81" selection-end-column="20" />
+              <caret line="55" column="51" selection-start-line="55" selection-start-column="51" selection-end-line="55" selection-end-column="51" />
               <folding>
                 <element signature="e#23#38#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test_dataset_0_cols_MA..csv" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/unit_tests/test_data/test_datasets_csv/test_dataset_0_cols_MA..csv">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -66,20 +54,50 @@
         <entry file="file://$PROJECT_DIR$/unit_tests/test_data/test_datasets_csv/expected_prepared_test_dataset_0.csv">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="5" column="17" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
+              <caret line="5" column="8" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="test_dataset_0_rows_MA.csv" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/unit_tests/test_data/test_datasets_csv/test_dataset_0_rows_MA.csv">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/prep_dataset_for_metaboanalyst/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6122449">
-              <caret line="50" column="24" selection-start-line="50" selection-start-column="24" selection-end-line="50" selection-end-column="24" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="49" column="21" selection-start-line="49" selection-start-column="21" selection-end-line="49" selection-end-column="21" />
               <folding>
                 <element signature="e#23#33#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test_dataset_0_cols_MA.csv" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/unit_tests/test_data/test_datasets_csv/test_dataset_0_cols_MA.csv">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test_dataset_0_cols.csv" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/unit_tests/test_data/test_datasets_csv/test_dataset_0_cols.csv">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -133,10 +151,10 @@
         <option value="$PROJECT_DIR$/unit_tests/test_data/test_maps/test_map.pkl" />
         <option value="$PROJECT_DIR$/name_map_utils/__init__.py" />
         <option value="$PROJECT_DIR$/unit_tests/test_name_map_utils.py" />
-        <option value="$PROJECT_DIR$/prep_dataset_for_metaboanalyst/__init__.py" />
-        <option value="$PROJECT_DIR$/unit_tests/test_data/test_datasets_csv/expected_prepared_test_dataset_0.csv" />
         <option value="$PROJECT_DIR$/unit_tests/test_data/test_datasets_csv/test_dataset_0_cols_MA..csv" />
         <option value="$PROJECT_DIR$/unit_tests/test_prep_dataset_for_metaboanalyst.py" />
+        <option value="$PROJECT_DIR$/prep_dataset_for_metaboanalyst/__init__.py" />
+        <option value="$PROJECT_DIR$/unit_tests/test_data/test_datasets_csv/expected_prepared_test_dataset_0.csv" />
       </list>
     </option>
   </component>
@@ -563,7 +581,14 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="7" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/prep_dataset_for_metaboanalyst/__init__.py</url>
+          <line>56</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="8" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -789,26 +814,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/unit_tests/test_data/test_datasets_csv/expected_prepared_test_dataset_0.csv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="17" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/unit_tests/test_data/test_datasets_csv/test_dataset_0_cols_MA..csv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/unit_tests/test_prep_dataset_for_metaboanalyst.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="81" column="20" selection-start-line="81" selection-start-column="20" selection-end-line="81" selection-end-column="20" />
+          <caret line="55" column="51" selection-start-line="55" selection-start-column="51" selection-end-line="55" selection-end-column="51" />
           <folding>
             <element signature="e#23#38#0" expanded="true" />
           </folding>
@@ -817,11 +826,43 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/prep_dataset_for_metaboanalyst/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6122449">
-          <caret line="50" column="24" selection-start-line="50" selection-start-column="24" selection-end-line="50" selection-end-column="24" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="49" column="21" selection-start-line="49" selection-start-column="21" selection-end-line="49" selection-end-column="21" />
           <folding>
             <element signature="e#23#33#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/unit_tests/test_data/test_datasets_csv/test_dataset_0_cols_MA.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/unit_tests/test_data/test_datasets_csv/test_dataset_0_cols.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/unit_tests/test_data/test_datasets_csv/expected_prepared_test_dataset_0.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="5" column="8" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/unit_tests/test_data/test_datasets_csv/test_dataset_0_rows_MA.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
