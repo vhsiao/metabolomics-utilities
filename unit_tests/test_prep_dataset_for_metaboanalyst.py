@@ -1,8 +1,8 @@
 __author__ = 'vhsiao'
 
 import unittest
-from name_map_utils import NameMap
 from prep_dataset_for_metaboanalyst import *
+from itertools import izip_longest
 
 class SimpleTestPrepDatasetForMetaboanalyst(unittest.TestCase):
     def setUp(self):
@@ -47,10 +47,40 @@ class SimpleTestPrepDatasetForMetaboanalyst(unittest.TestCase):
                           )
 
     def test_prep_dataset(self):
-        pass
 
+        arg_sets = [['test_data/test_datasets_csv/test_dataset_0_cols.csv', 4, 0, 1],
+                    ['test_data/test_datasets_csv/test_dataset_0_rows.csv', 4, 0, 1, 'rows']]
+        for arg_set in arg_sets:
+            prep_dataset(*arg_set)
+            try:
+                diff = compare_csv_contents('{0}_MA.{1}'.format(*splitext(arg_set[0])),
+                                            'test_data/test_datasets_csv/expected_prepared_test_dataset_0.csv')
+                self.assertEquals(len(diff), 0)
+            except AssertionError:
+                raise AssertionError('File: {0}\n diff:\n{1}'.format(arg_set[0], diff))
 
+def compare_csv_contents(csv_file1, csv_file2):
+    with open(csv_file1, 'rU') as file1:
+        reader_file1 = csv.reader(file1)
+        with open(csv_file2, 'rU') as file2:
+            reader_file2 = csv.reader(file2)
 
+            diff = []
+            row = 0
+            col = 0
 
+            for line in izip_longest(reader_file1, reader_file2):
+                row += 1
+                try:
+                    pairs = zip(*line)
+                    for val1, val2 in pairs:
+                        col += 1
+                        if not val1 == val2:
+                            diff.append('R{row} C{col}: {val1} differs from {val2}'.format(
+                                row=row, col=col, val1=val1, val2=val2
+                            ))
+                except TypeError:
+                    print 'Size mismatch! {0}'.format(line)
+    return diff
 
 

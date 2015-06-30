@@ -2,50 +2,66 @@ __author__ = 'vhsiao'
 
 import csv
 import argparse
+from os.path import splitext
 from name_map_utils import NameMap
 
 label_map = {
     'wt': ['wt', 'wild'],  # wild type
     'he': ['het'],  # heterozygote
     'ho': ['hom', 'mut']  # homozygote
-    }
+}
 
 label_numbers = {'wt': 1, 'he': 2, 'ho': 3, 'unknown': 99}
 
-def prep_dataset(data_csv_path, num_metadata_rows, label_info_row_idx, litter_info_row_idx, data_organized_in='rows'):
+def prep_dataset(data_csv_path, num_metadata_fields, label_info_field_idx, litter_info_field_idx, data_organized_in='cols'):
     """
     Prep dataset for metaboanalyst.
-    :param data_csv_path: Path to a data csv file. Assumes the samples are in rows.
-    :param num_metadata_rows: The number of metadata rows in the data file.
-    :param label_info_row_idx: The index of the row containing information about sample group labels.
-    :param litter_info_row_idx: The index of the row containing information about sample litter.
+    :param data_csv_path: Path to a data csv file.
+    :param num_metadata_fields: The number of metadata rows in the data file.
+    :param label_info_field_idx: The index of the row containing information about sample group labels.
+    :param litter_info_field_idx: The index of the row containing information about sample litter.
+    :param data_organized_in: Options: 'rows' or 'cols'. Specifies whether data is in rows or columns.
+    Defaults to 'cols'.
     :return: None
     """
+
+    if data_organized_in not in ['rows', 'cols']:
+        raise Exception('Invalid option {0} for data_organized_in.'.format(data_organized_in))
+
     #TODO
-    with open(data_csv_path) as source:
-        with open('{0}_{1}'.format('metaboanalyst', data_csv_path)) as destination:
-            reader = csv.DictReader(source)
+    with open(data_csv_path, 'rU') as source:
+        reader = csv.reader(source)
+        dataset = [line for line in reader]
+        if data_organized_in == 'rows':
+            dataset = zip(*dataset)  # first pivot data if it is in rows. Now each column should contain one sample.
 
-            # Grab the sample metadata entries from the source file
-            sample_metadata = []
-            for i in range(num_metadata_rows):
-                sample_metadata.append(source.readline())
+        # Grab the sample metadata entries from the source file. Discard the first column ('Sample Name', etc).
+        sample_metadata = [row[1:] for row in dataset[:num_metadata_fields]]
+        sample_names, sample_labels = consolidate_sample_metadata(
+            sample_metadata, label_info_field_idx, litter_info_field_idx)
 
-            sample_names, sample_labels = consolidate_sample_metadata(sample_metadata, label_info_row_idx, litter_info_row_idx)
+        # Standardize compound names using the name map
+        compound_names = [row[0] for row in dataset[num_metadata_fields:]]
+        standardized_compound_names = standardize_compound_names(compound_names)
 
-            # Standardize compound names using the name map
-            standardized_compound_names = standardize_compound_names(reader.fieldnames[num_metadata_rows:])
-            standardized_compound_names = [''].extend(standardized_compound_names)
-            writer = csv.DictWriter(destination, fieldnames=standardized_compound_names)
-            writer.writeheader()
-            writer.writerow(['Sample'].extend(sample_names))
-            writer.writerow(['Label'].extend(sample_labels))
-            writer.writerows(source.readlines())
+        # Clean up the data values
+        values = [row[1:] for row in dataset[num_metadata_fields:]]
+        cleaned_values = clean_values(values)
+
+    with open('{0}_MA.{1}'.format(*splitext(data_csv_path)), 'w+') as destination:
+        fieldnames = ['Sample', 'Label'] + standardized_compound_names
+        writer = csv.DictWriter(destination, fieldnames=fieldnames)
+        writer.writeheader()
+        for i in range(len(values)):
+            for j in range(len(values[i])):
+                rowdict = {field: value for field, value in zip(
+                fieldnames, [sample_names[j], str(sample_labels[j])] + [values[i][j]])}
+            writer.writerow(rowdict)
 
 def consolidate_sample_metadata(sample_metadata, label_info_entry_idx, litter_info_entry_idx):
     """
     Infer good sample names from sample metadata entries
-    :param sample_metadata: A 2-D list. Each row is a list of one metadata field for each sample.
+    :param sample_metadata: A 2-D list. Each row is a list of metadata fields for each sample.
     Example: [['WT', 'HET'],['litter2', 'litter1'], ['12345', '67890']]
     :param label_info_entry_idx: Index of the metadata field containing label information. Example: 0
     :param litter_info_entry_idx: Index of the metadata field containing litter information. Example: 1
@@ -110,6 +126,15 @@ def standardize_compound_names(original_fieldnames, map_pkl_path='maps/map.pkl')
     """
     name_map = NameMap(map_pkl_path=map_pkl_path)
     return [name_map[field] if field in name_map else field for field in original_fieldnames]
+
+def clean_values(values):
+    """
+    Clean values found in dataset.
+    :param values: 2D array of data values. Example: [1, 'N/A', '2], [3, 4, 5]
+    :return: 2D array of cleaned data values. Example: [1, '', 2], [3, 4, 5]
+    """
+    unwanted_values = ['N/A', 'Unknown', 'NaN']
+    return [['' if x in unwanted_values else x for x in row] for row in values]
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
