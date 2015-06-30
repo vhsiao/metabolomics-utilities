@@ -2,7 +2,6 @@ __author__ = 'vhsiao'
 
 import cPickle as pickle
 import csv
-import argparse
 
 class NameMap():
     name_map = dict()
@@ -32,7 +31,9 @@ class NameMap():
         :param name_map_csv_path: path/to/a CSV file containing mappings to add to the NameMap
         :return: None
         """
-        update_method = lambda input_name_map: self.name_map.update(input_name_map)
+        ignore = ['', None, 'NA']
+        update_method = lambda input_name_map: self.name_map.update(
+            {k: v for k, v in input_name_map.items() if v not in ignore})
         self._update_mappings(update_method, name_map_csv_path)
 
     def remove_mappings(self, name_map_csv_path):
@@ -42,7 +43,7 @@ class NameMap():
         """
         def update_method(input_name_map):
             wanted_keys = filter(lambda k: (k not in input_name_map)
-                                 or (k in input_name_map and not input_name_map[k] == self.name_map[k]), self.name_map)
+                                           or (k in input_name_map and not input_name_map[k] == self.name_map[k]), self.name_map)
             self.name_map = {k: self.name_map[k] for k in wanted_keys}
         self._update_mappings(update_method, name_map_csv_path)
 
@@ -77,25 +78,9 @@ class NameMap():
             with open(map_pkl_path, 'w+') as map_pkl:
                 self.map_pkl_path = map_pkl_path
                 self.name_map = pickle.load(map_pkl)
+            pass
         except EOFError:
-            self.map_pkl_path = map_pkl_path
+            pass
         except IOError:
             self.map_pkl_path = 'temp_map.pkl'
-        self._commit()
-
-if __name__ == 'main':
-    parser = argparse.ArgumentParser()
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument('-d', action = 'store_true')
-    group.add_argument('-a', action = 'store_true')
-    parser.add_argument('New name map', metavar='new_name_map')
-    args = parser.parse_args()
-
-    current_map = NameMap()
-
-    if args.a:
-        current_map.add_mappings(args.new_name_map)
-    elif args.d:
-        current_map.remove_mappings(args.new_name_map)
-    else:
-        print('There are currently {0} values in the name map.'.format(current_map.name_map))
+            self._commit()

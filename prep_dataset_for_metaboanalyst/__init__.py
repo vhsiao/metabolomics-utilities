@@ -2,7 +2,10 @@ __author__ = 'vhsiao'
 
 import csv
 import argparse
-from os.path import splitext
+from os.path import splitext, dirname
+import sys
+sys.path.extend([dirname(dirname(__file__))])
+
 from name_map_utils import NameMap
 
 label_map = {
@@ -123,7 +126,17 @@ def standardize_compound_names(original_fieldnames, map_pkl_path='maps/map.pkl')
     :return: A list of standardized field names
     """
     name_map = NameMap(map_pkl_path=map_pkl_path)
-    return [name_map[field] if field in name_map else field for field in original_fieldnames]
+    fieldnames = [strip_suffix(x) for x in original_fieldnames]
+    return [name_map[field] if field.lower() in name_map else field for field in fieldnames]
+
+def strip_suffix(name):
+    stripped = name
+    suffixes = ['-nega', '-posi', 'nega', 'posi']
+    for s in suffixes:
+        if name.endswith(s):
+            stripped = name[:-len(s)]
+            break
+    return stripped
 
 def clean_values(values):
     """
@@ -133,15 +146,3 @@ def clean_values(values):
     """
     unwanted_values = ['N/A', 'Unknown', 'NaN']
     return [['' if x in unwanted_values else x for x in row] for row in values]
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('data.csv', metavar='data_csv')
-    parser.add_argument('Number of identification entries', default=4, metavar='num_id_entries',
-                        description='How many initial entries in the file contain ID information for the sample?')
-    parser.add_argument('Column with label info', default=0, metavar='label_info_entry_idx',
-                        description='Which initial entry in the file contains the label info? (eg: wild-type)')
-    parser.add_argument('Column with litter info', default=1, metavar='litter_info_entry_idx',
-                        description='Which initial entry in the file contains the litter info? (eg: litter 1)')
-    args = parser.parse_args()
-    prep_dataset(args.data_csv, args.num_id_entries, args.label_info_entry_idx, args.litter_info_entry_idx)
