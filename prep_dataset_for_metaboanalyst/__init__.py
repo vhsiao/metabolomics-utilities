@@ -28,7 +28,6 @@ def prep_dataset(data_csv_path, num_metadata_fields, label_info_field_idx, litte
     if data_organized_in not in ['rows', 'cols']:
         raise Exception('Invalid option {0} for data_organized_in.'.format(data_organized_in))
 
-    #TODO
     with open(data_csv_path, 'rU') as source:
         reader = csv.reader(source)
         dataset = [line for line in reader]
@@ -45,17 +44,16 @@ def prep_dataset(data_csv_path, num_metadata_fields, label_info_field_idx, litte
         standardized_compound_names = standardize_compound_names(compound_names)
 
         # Clean up the data values
-        values = [row[1:] for row in dataset[num_metadata_fields:]]
+        values = zip(*[row[1:] for row in dataset[num_metadata_fields:]])
         cleaned_values = clean_values(values)
 
-    with open('{0}_MA.{1}'.format(*splitext(data_csv_path)), 'w+') as destination:
+    with open('{0}_MA{1}'.format(*splitext(data_csv_path)), 'w+') as destination:
         fieldnames = ['Sample', 'Label'] + standardized_compound_names
         writer = csv.DictWriter(destination, fieldnames=fieldnames)
         writer.writeheader()
-        for i in range(len(values)):
-            for j in range(len(values[i])):
-                rowdict = {field: value for field, value in zip(
-                fieldnames, [sample_names[j], str(sample_labels[j])] + [values[i][j]])}
+        for i in range(len(cleaned_values)):
+            rowdict = {field: value for field, value in zip(
+            fieldnames, [sample_names[i], str(sample_labels[i])] + cleaned_values[i])}
             writer.writerow(rowdict)
 
 def consolidate_sample_metadata(sample_metadata, label_info_entry_idx, litter_info_entry_idx):

@@ -53,7 +53,7 @@ class SimpleTestPrepDatasetForMetaboanalyst(unittest.TestCase):
         for arg_set in arg_sets:
             prep_dataset(*arg_set)
             try:
-                diff = compare_csv_contents('{0}_MA.{1}'.format(*splitext(arg_set[0])),
+                diff = compare_csv_contents('{0}_MA{1}'.format(*splitext(arg_set[0])),
                                             'test_data/test_datasets_csv/expected_prepared_test_dataset_0.csv')
                 self.assertEquals(len(diff), 0)
             except AssertionError:
