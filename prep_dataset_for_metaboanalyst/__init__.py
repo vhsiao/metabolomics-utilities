@@ -119,15 +119,20 @@ def infer_label(label_entry):
         label = 'unknown'
     return label
 
-def standardize_compound_names(original_fieldnames, map_pkl_path='maps/map.pkl'):
+def standardize_compound_names(original_names):
     """
-    :param original_fieldnames: A list of original field names to be standardized
+    :param original_names: A list of original field names to be standardized
     :param map_pkl_path: Path to a pkl file containing mappings used to standardize the names
     :return: A list of standardized field names
     """
-    name_map = NameMap(map_pkl_path=map_pkl_path)
-    fieldnames = [strip_suffix(x) for x in original_fieldnames]
-    return [name_map[field] if field.lower() in name_map else field for field in fieldnames]
+    name_map = NameMap()
+    names = [strip_suffix(x).lower() for x in original_names]
+    standardized = names
+    for i in range(len(names)):
+        name = names[i]
+        if name in name_map:
+            standardized[i] = name_map[name]
+    return standardized
 
 def strip_suffix(name):
     stripped = name

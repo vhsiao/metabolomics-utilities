@@ -1,6 +1,6 @@
 *.pyc
+*.pkl
 .DS_Store
 name_map_utils/maps/*
 name_map_utils/map_csv/*
 .idea
-

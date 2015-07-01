@@ -2,7 +2,9 @@ __author__ = 'vhsiao'
 
 import cPickle as pickle
 import csv
+from os.path import dirname, join
 
+default_map_pkl_path = join(dirname(dirname(__file__)), 'name_map_utils/maps/map.pkl')
 class NameMap():
     name_map = dict()
     map_pkl_path = ''
@@ -42,8 +44,9 @@ class NameMap():
         :return: None
         """
         def update_method(input_name_map):
-            wanted_keys = filter(lambda k: (k not in input_name_map)
-                                           or (k in input_name_map and not input_name_map[k] == self.name_map[k]), self.name_map)
+            wanted_keys = filter(
+                lambda k: (k not in input_name_map) or (k in input_name_map and not input_name_map[k] == self.name_map[k]),
+                self.name_map)
             self.name_map = {k: self.name_map[k] for k in wanted_keys}
         self._update_mappings(update_method, name_map_csv_path)
 
@@ -73,9 +76,9 @@ class NameMap():
             raise
         return name_map_2
 
-    def __init__(self, map_pkl_path='maps/map.pkl'):
+    def __init__(self, map_pkl_path=default_map_pkl_path):
         try:
-            with open(map_pkl_path, 'w+') as map_pkl:
+            with open(map_pkl_path, 'r') as map_pkl:
                 self.map_pkl_path = map_pkl_path
                 self.name_map = pickle.load(map_pkl)
             pass
