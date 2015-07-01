@@ -7,64 +7,76 @@ sS'3-methylphenylacetic acid'
 p4
 S'3-Methylphenylacetic acid'
 p5
-sS'sarcosine'
+sS'kynurenic acid'
 p6
-S'Sarcosine'
-p7
-sS'thiamine'
-p8
-S'Thiamine'
-p9
-sS'allantoin'
-p10
-S'Allantoin'
-p11
-sS'lysine'
-p12
-S'L-Lysine'
-p13
-sS'methionine'
-p14
-S'L-Methionine'
-p15
-sS'glutamine'
-p16
-S'L-Glutamine'
-p17
-sS'anthranilate'
-p18
-S'2-Aminobenzoic acid'
-p19
-sS'hydroxyproline'
-p20
-S'4-Hydroxyproline'
-p21
-sS'Atrolactic acid'
-p22
-S'Phenylacetic acid'
-p23
-sS'threonine'
-p24
-S'L-Threonine'
-p25
-sS'histidine'
-p26
-S'L-Histidine'
-p27
-sS'myo-inositol'
-p28
-S'Myoinositol'
-p29
-sS'cystathionine'
-p30
-S'L-Cystathionine'
-p31
-sS'Kynurenic acid'
-p32
 S'Kynurenic acid'
-p33
-sS'cyclic-AMP'
-p34
+p7
+sS'sarcosine'
+p8
+S'Sarcosine'
+p9
+sS'thiamine'
+p10
+S'Thiamine'
+p11
+sS'allantoin'
+p12
+S'Allantoin'
+p13
+sS'lysine'
+p14
+S'L-Lysine'
+p15
+sS'methionine'
+p16
+S'L-Methionine'
+p17
+sS'cyclic-amp'
+p18
 S'Cyclic AMP'
+p19
+sS'glutamine'
+p20
+S'L-Glutamine'
+p21
+sS'anthranilate'
+p22
+S'2-Aminobenzoic acid'
+p23
+sS'hydroxyproline'
+p24
+S'4-Hydroxyproline'
+p25
+sS'Atrolactic acid'
+p26
+S'Phenylacetic acid'
+p27
+sS'threonine'
+p28
+S'L-Threonine'
+p29
+sS'histidine'
+p30
+S'L-Histidine'
+p31
+sS'myo-inositol'
+p32
+S'Myoinositol'
+p33
+sS'cystathionine'
+p34
+S'L-Cystathionine'
 p35
+sS'Kynurenic acid'
+p36
+S'Kynurenic acid'
+p37
+sS'atrolactic acid'
+p38
+S'Phenylacetic acid'
+p39
+sS'cyclic-AMP'
+p40
+S'Cyclic AMP'
+p41
 s.
