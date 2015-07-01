@@ -1,7 +1,7 @@
 import argparse
 import sys
 from os import listdir
-from os.path import dirname, join
+from os.path import dirname, basename
 sys.path.extend([dirname(dirname(__file__))])
 
 from name_map_utils import *
@@ -31,6 +31,13 @@ if __name__ == '__main__':
     elif args.find_in_dir:
         print "Incorporating all name map files in {0}.".format(args.find_in_dir)
         name_map_files = [join(args.find_in_dir, f) for f in listdir(args.find_in_dir) if f.endswith('.csv')]
+
+        # Find "manual" csv files and move them to the end so that their contents take priority.
+        index_of_manual = filter(lambda j: 'manual' in basename(name_map_files[j]), range(len(name_map_files)))
+        index_of_manual.sort(reverse=True)
+        for i in index_of_manual:
+            name_map_files.append(name_map_files.pop(i))
+
     else:
         name_map_files = []
         print('There are currently {0} values in the name map.'.format(len(current_map)))
