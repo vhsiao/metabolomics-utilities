@@ -35,7 +35,7 @@ class NameMap():
         """
         ignore = ['', None, 'NA']
         update_method = lambda input_name_map: self.name_map.update(
-            {k: v for k, v in input_name_map.items() if v not in ignore})
+            {k.lower(): v for k, v in input_name_map.items() if v not in ignore})
         self._update_mappings(update_method, name_map_csv_path)
 
     def remove_mappings(self, name_map_csv_path):
@@ -45,7 +45,7 @@ class NameMap():
         """
         def update_method(input_name_map):
             wanted_keys = filter(
-                lambda k: (k not in input_name_map) or (k in input_name_map and not input_name_map[k] == self.name_map[k]),
+                lambda k: (k.lower() not in input_name_map) or (k in input_name_map and not input_name_map[k] == self.name_map[k]),
                 self.name_map)
             self.name_map = {k: self.name_map[k] for k in wanted_keys}
         self._update_mappings(update_method, name_map_csv_path)

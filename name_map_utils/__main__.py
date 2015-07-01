@@ -21,9 +21,14 @@ if __name__ == '__main__':
     group_dir_vs_file.add_argument('--find-in-dir', metavar='name_map_dir',
                                    default='{0}/map_csv'.format(dirname(__file__)),
                                    help='Add or remove all files found in dir.')
+    parser.add_argument('--clear_first', action='store_true', default=False,
+                        help='Use this flag if you want to clear the existing name map first.')
 
     args = parser.parse_args()
     current_map = NameMap()
+
+    if args.clear_first:
+        current_map.clear()
 
     if args.use_file:
         print "Incorporating file {0}".format(args.use_file)
