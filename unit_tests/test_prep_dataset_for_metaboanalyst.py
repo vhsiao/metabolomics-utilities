@@ -1,14 +1,15 @@
 __author__ = 'vhsiao'
 
 import unittest
+from os.path import abspath
 from prep_dataset_for_metaboanalyst import *
 from itertools import izip_longest
 
 class SimpleTestPrepDatasetForMetaboanalyst(unittest.TestCase):
     def setUp(self):
         self.map_csv_path = 'test_data/test_map_csv/test_map_0.csv'
-        self.map_pkl_path = 'test_data/test_map/test_map_0.pkl'
-        self.name_map = NameMap(self.map_pkl_path)
+        self.map_pkl_path = 'test_data/test_maps/test_map_0.pkl'
+        self.name_map = NameMap(abspath(self.map_pkl_path))
         self.name_map.add_mappings(self.map_csv_path)
 
     def tearDown(self):
@@ -20,6 +21,12 @@ class SimpleTestPrepDatasetForMetaboanalyst(unittest.TestCase):
         result = standardize_compound_names(original_fieldnames, self.map_pkl_path)
         self.assertEqual(result,
                     ['Alanine', '4-Hydroxyproline', 'Sarcosine', 'L-Glutamine', '2-Aminobenzoic acid', 'Alanine', 'bunny'])
+
+        original_fieldnames = ['alanine', 'hydroxyproline', '4-Hydroxyproline', 'glutamine']
+        result = standardize_compound_names(original_fieldnames, self.map_pkl_path)
+        self.assertEqual(result,
+                         ['Alanine', '4-Hydroxyproline', '4-Hydroxyproline', 'L-Glutamine']
+        )
 
     def test_infer_label(self):
         print '\n\ntest_infer_label'
@@ -48,8 +55,9 @@ class SimpleTestPrepDatasetForMetaboanalyst(unittest.TestCase):
 
     def test_prep_dataset(self):
 
-        arg_sets = [['test_data/test_datasets_csv/test_dataset_0_cols.csv', 4, 0, 1],
-                    ['test_data/test_datasets_csv/test_dataset_0_rows.csv', 4, 0, 1, 'rows']]
+        map_pkl_path = 'test_data/test_maps/test_map_0.pkl'
+        arg_sets = [['test_data/test_datasets_csv/test_dataset_0_cols.csv', 4, 0, 'cols', 1, map_pkl_path],
+                    ['test_data/test_datasets_csv/test_dataset_0_rows.csv', 4, 0, 'rows', 1, map_pkl_path]]
         for arg_set in arg_sets:
             prep_dataset(*arg_set)
             try:

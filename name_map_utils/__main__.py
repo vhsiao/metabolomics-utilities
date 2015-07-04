@@ -1,26 +1,31 @@
 import argparse
 import sys
 from os import listdir
-from os.path import dirname, basename
+from os.path import dirname, basename, join
 sys.path.extend([dirname(dirname(__file__))])
 
-from name_map_utils import *
+import name_map_utils
+from name_map_utils import NameMap
+
+# TODO extend this module to generate a map to PubChem CIDs for better accuracy.
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     group_dir_vs_file = parser.add_mutually_exclusive_group()
-    group_add_vs_remove = parser.add_mutually_exclusive_group()
+    group_action = parser.add_mutually_exclusive_group()
 
-    group_add_vs_remove.add_argument('-d', action='store_true', help='delete mappings found in a single file')
-    group_add_vs_remove.add_argument('-a', action='store_true', help='add mappings found in a single file.')
+    group_action.add_argument('-d', action='store_true', help='Delete mappings found in a single file')
+    group_action.add_argument('-a', action='store_true', help='Add mappings found in a single file.')
+    group_action.add_argument('--prune_csv', action='store_true', help='Prune input files.')
 
     group_dir_vs_file.add_argument(
-        '--use-file', metavar='name_map_file', help='The file to add or remove mappings from.')
+        '--use_file', metavar='name_map_file', help='The file to add or remove mappings from.')
 
     group_dir_vs_file.add_argument('--find-in-dir', metavar='name_map_dir',
                                    default='{0}/map_csv'.format(dirname(__file__)),
                                    help='Add or remove all files found in dir.')
+
     parser.add_argument('--clear_first', action='store_true', default=False,
                         help='Use this flag if you want to clear the existing name map first.')
 
@@ -31,8 +36,9 @@ if __name__ == '__main__':
         current_map.clear()
 
     if args.use_file:
-        print "Incorporating file {0}".format(args.use_file)
-        name_map_files = [args.name_map_file]
+        use_file = join(args.find_in_dir, args.use_file)
+        print "Incorporating file {0}".format(use_file)
+        name_map_files = [use_file]
     elif args.find_in_dir:
         print "Incorporating all name map files in {0}.".format(args.find_in_dir)
         name_map_files = [join(args.find_in_dir, f) for f in listdir(args.find_in_dir) if f.endswith('.csv')]
@@ -53,5 +59,7 @@ if __name__ == '__main__':
             current_map.add_mappings(f)
         elif args.d:
             current_map.remove_mappings(f)
+        elif args.prune_csv:
+            name_map_utils.prune(f)
 
     print str(len(name_map_files)) + ' file(s) processed.'
