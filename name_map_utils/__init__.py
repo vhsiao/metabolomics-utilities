@@ -4,20 +4,21 @@ import cPickle as pickle
 import csv
 import re
 from os.path import dirname, join
-default_map_pkl_path = join(dirname(__file__), 'maps/map.pkl')
+default_map_pkl_path = join(dirname(dirname(__file__)), 'name_map_utils/maps/map.pkl')
+default_temp_map_pkl_path = join(dirname(dirname(__file__)), 'name_map_utils/maps/temp_map.pkl')
 
 class NameMap():
     name_map = dict()
     map_pkl_path = ''
 
     def __getitem__(self, item):
-        return self.name_map.__getitem__(self._clean_key(item))
+        return self.name_map.__getitem__(_clean_key(item))
 
     def __setitem__(self, key, value):
-        self.name_map.__setitem__(self._clean_key(key), value)
+        self.name_map.__setitem__(_clean_key(key), value)
 
     def __contains__(self, item):
-        return self.name_map.__contains__(self._clean_key(item))
+        return self.name_map.__contains__(_clean_key(item))
 
     def __len__(self):
         return self.name_map.__len__()
@@ -51,9 +52,6 @@ class NameMap():
             self.name_map = {k: self.name_map[k] for k in wanted_keys}
         self._update_mappings(update_method, name_map_csv_path)
 
-    def _clean_key(self, key):
-        return _strip_suffix(key).strip().replace(',', ' ').lower()
-
     def _update_mappings(self, update_method, name_map_csv_path):
         input_name_map = self.get_map_from_csv(name_map_csv_path)
         update_method(input_name_map)
@@ -81,9 +79,19 @@ class NameMap():
         return name_map_2
 
     def __init__(self, map_pkl_path=default_map_pkl_path):
+        print "using name map at: {0}".format(map_pkl_path)
         with open(map_pkl_path, 'r') as map_pkl:
             self.map_pkl_path = map_pkl_path
-            self.name_map = pickle.load(map_pkl)
+            try:
+                self.name_map = pickle.load(map_pkl)
+            except EOFError:
+                if map_pkl_path == default_map_pkl_path:
+                    print "Name map not found at default location. Creating new."
+                else:
+                    print "No name map found at location. Using temp."
+                    self.map_pkl_path = default_temp_map_pkl_path
+        self._commit()
+
 
 def prune(name_map_csv_path):
     """
@@ -114,11 +122,5 @@ def _redundant_name_map_csv_entry(rowdict):
         redundant = True
     return redundant
 
-def _strip_suffix(name):
-    stripped = name
-    suffixes = ['-nega', '-posi', 'nega', 'posi']
-    for s in suffixes:
-        if name.endswith(s):
-            stripped = name[:-len(s)]
-            break
-    return stripped
+def _clean_key(key):
+        return key.strip().replace(',', ' ').lower()

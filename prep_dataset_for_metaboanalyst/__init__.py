@@ -9,14 +9,14 @@ from name_map_utils import NameMap, default_map_pkl_path
 
 label_map = {
     'wt': ['wt', 'wild'],  # wild type
-    'he': ['het'],  # heterozygote
-    'ho': ['hom', 'mut']  # homozygote
+    'he': ['het', 'he'],  # heterozygote
+    'ho': ['hom', 'mut', 'ho']  # homozygote
 }
 
 label_numbers = {'wt': 1, 'he': 2, 'ho': 3, 'unknown': 99}
 
 def prep_dataset(data_csv_path, num_metadata_fields, label_info_field_idx, data_organized_in='cols',
-                 litter_info_field_idx=None, map_pkl_path=default_map_pkl_path):
+                 litter_info_field_idx=None, map_pkl_path=default_map_pkl_path, resolve_names=True):
     """
     Prep dataset for metaboanalyst.
     :param data_csv_path: Path to a data csv file.
@@ -44,7 +44,10 @@ def prep_dataset(data_csv_path, num_metadata_fields, label_info_field_idx, data_
 
         # Standardize compound names using the name map
         compound_names = [row[0] for row in dataset[num_metadata_fields:]]
-        standardized_compound_names = standardize_compound_names(compound_names, map_pkl_path=map_pkl_path)
+        if resolve_names:
+            standardized_compound_names = standardize_compound_names(compound_names, map_pkl_path=map_pkl_path)
+        else:
+            standardized_compound_names = compound_names
 
         # Clean up the data values
         values = zip(*[row[1:] for row in dataset[num_metadata_fields:]])
@@ -77,12 +80,12 @@ def consolidate_sample_metadata(sample_metadata, label_info_entry_idx, litter_in
         raise
 
     # Litter information if available
+    litter_info = None
     if litter_info_entry_idx:
         try:
             litter_info = sample_metadata[litter_info_entry_idx]
         except IndexError:
             print "Invalid litter info entry. Litter info will not be included in the sample id."
-            litter_info = None
         except:
             raise
 
@@ -91,7 +94,7 @@ def consolidate_sample_metadata(sample_metadata, label_info_entry_idx, litter_in
     for i in range(len(label_info)):
         label = infer_label(label_info[i])
         litter = ''
-        if litter_info_entry_idx:
+        if litter_info:
             litter = 'L' + ''.join([c for c in litter_info[i] if c.isdigit()])
         sample_id = '_'.join([str(i), label, litter])
         sample_ids.append(sample_id)
@@ -131,10 +134,12 @@ def standardize_compound_names(original_names, map_pkl_path=default_map_pkl_path
     name_map = NameMap(map_pkl_path)
     standardized = original_names
     for i in range(len(standardized)):
-        name = standardized[i]
+        name = _strip_suffix(standardized[i])
         if name in name_map:
             print '{0} --> {1}'.format(name, name_map[name])
             standardized[i] = name_map[name]
+        else:
+            standardized[i] = name
     return standardized
 
 def clean_values(values):
@@ -145,3 +150,13 @@ def clean_values(values):
     """
     unwanted_values = ['N/A', 'Unknown', 'NaN']
     return [['' if x in unwanted_values else x for x in row] for row in values]
+
+def _strip_suffix(name):
+    stripped = name
+    suffixes = ['-nega', '-posi', 'nega', 'posi']
+    for s in suffixes:
+        if name.endswith(s):
+            stripped = name[:-len(s)]
+            print '  {name} --> {stripped}'.format(name=name, stripped=stripped)
+            break
+    return stripped

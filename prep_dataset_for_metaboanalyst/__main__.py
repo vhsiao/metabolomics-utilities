@@ -15,6 +15,8 @@ if __name__ == '__main__':
                         help='How many initial entries in the file contain ID information for the sample?')
     parser.add_argument('label_info_entry_idx', metavar='Row/column with label info', type=int,
                         help='Which initial entry in the file contains the label info? (eg: wild-type)')
+    parser.add_argument('--resolve_names', action='store_true',
+                        help='Should I try to resolve the compound names? Default yes.')
 
     parser.add_argument('--data_organized_in', default='cols', metavar='Data organization',
                         help='Is the data organized in rows or cols?')
@@ -23,5 +25,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     prep_dataset(args.data_csv, num_metadata_fields=args.num_id_entries,data_organized_in=args.data_organized_in,
-                 label_info_field_idx=args.label_info_entry_idx, litter_info_field_idx=args.litter_info_entry_idx)
+                 label_info_field_idx=args.label_info_entry_idx, litter_info_field_idx=args.litter_info_entry_idx,
+                 resolve_names=args.resolve_names)
     print 'All done. Your prepped data is in the same folder as the source data. Cool beans.'

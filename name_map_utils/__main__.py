@@ -30,10 +30,7 @@ if __name__ == '__main__':
                         help='Use this flag if you want to clear the existing name map first.')
 
     args = parser.parse_args()
-    current_map = NameMap()
-
-    if args.clear_first:
-        current_map.clear()
+    name_map_files = []
 
     if args.use_file:
         use_file = join(args.find_in_dir, args.use_file)
@@ -49,9 +46,10 @@ if __name__ == '__main__':
         for i in index_of_manual:
             name_map_files.append(name_map_files.pop(i))
 
-    else:
-        name_map_files = []
-        print('There are currently {0} values in the name map.'.format(len(current_map)))
+    current_map = NameMap()
+
+    if args.clear_first:
+        current_map.clear()
 
     for f in name_map_files:
         print f
@@ -61,5 +59,7 @@ if __name__ == '__main__':
             current_map.remove_mappings(f)
         elif args.prune_csv:
             name_map_utils.prune(f)
+        else:
+            print('There are currently {0} values in the name map.'.format(len(current_map)))
 
     print str(len(name_map_files)) + ' file(s) processed.'
