@@ -7,6 +7,12 @@ from os.path import dirname, join
 default_map_pkl_path = join(dirname(dirname(__file__)), 'name_map_utils/maps/map.pkl')
 default_temp_map_pkl_path = join(dirname(dirname(__file__)), 'name_map_utils/maps/temp_map.pkl')
 
+# Constants
+standard_name = 'sn'
+pubchem = 'pc'
+kegg = 'ke'
+hmdb = 'hm'
+
 class NameMap():
     name_map = dict()
     map_pkl_path = ''
@@ -37,7 +43,7 @@ class NameMap():
         """
         ignore = ['', None, 'NA']
         update_method = lambda input_name_map: self.name_map.update(
-            {k.lower(): v for k, v in input_name_map.items() if v not in ignore})
+            {k.lower(): {k2: v2 for k2, v2 in v.items() if v2 not in ignore} for k, v in input_name_map.items()})
         self._update_mappings(update_method, name_map_csv_path)
 
     def remove_mappings(self, name_map_csv_path):
@@ -68,7 +74,11 @@ class NameMap():
             with open(name_map_csv_path, 'rU') as name_map_csv:
                 reader = csv.DictReader(name_map_csv)
                 try:
-                    name_map_2 = {row['Query']: row['Match'] for row in reader}
+                    name_map_2 = {row['Query']: {
+                        k1: row[k2] for k1, k2 in zip([standard_name, pubchem, kegg, hmdb],
+                                                      ['Match', 'PubChem', 'KEGG', 'HMDB'])
+                        if k2 in row
+                    } for row in reader}
                 except:
                     print('Had trouble adding entries from this name_map file. Double check the file {0}'
                           .format(name_map_csv_path))
@@ -101,7 +111,7 @@ def prune(name_map_csv_path):
         "methionine","Methionine
         "glucose.1","Glucose"
     :param name_map_csv_path:
-    :return:
+    :return: None
     """
     with open(name_map_csv_path, 'rU') as name_map_csv:
         reader = csv.DictReader(name_map_csv)

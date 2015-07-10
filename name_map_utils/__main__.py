@@ -29,6 +29,7 @@ if __name__ == '__main__':
     parser.add_argument('--clear_first', action='store_true', default=False,
                         help='Use this flag if you want to clear the existing name map first.')
 
+
     args = parser.parse_args()
     name_map_files = []
 

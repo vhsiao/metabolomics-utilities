@@ -5,4 +5,5 @@
 .DS_Store
 name_map_utils/maps/*
 name_map_utils/map_csv/*
+unit_tests/test_data/*
 

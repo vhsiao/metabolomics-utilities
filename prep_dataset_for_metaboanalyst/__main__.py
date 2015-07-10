@@ -11,15 +11,19 @@ from prep_dataset_for_metaboanalyst import *
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('data_csv', metavar='data.csv')
-    parser.add_argument('num_id_entries', default=4, metavar='Number of identification entries', type=int,
-                        help='How many initial entries in the file contain ID information for the sample?')
-    parser.add_argument('label_info_entry_idx', metavar='Row/column with label info', type=int,
-                        help='Which initial entry in the file contains the label info? (eg: wild-type)')
-    parser.add_argument('--resolve_names', action='store_true',
-                        help='Should I try to resolve the compound names? Default yes.')
+    parser.add_argument('num_id_entries', default=2, metavar='Number of identification entries', type=int,
+                        help='How many initial entries in the file contain ID information for the sample? Default 2.')
+
+    parser.add_argument('--resolve_names_to', default=None,
+                        help='Should I try to resolve the compound names? Specify standard_names or pubchem_ids.\
+                             Names are not resolved if no argument given. ')
 
     parser.add_argument('--data_organized_in', default='cols', metavar='Data organization',
-                        help='Is the data organized in rows or cols?')
+                        help='Is the data organized in rows or cols? Default cols.')
+
+    parser.add_argument('--label_info_entry_idx', metavar='Row/column with label info', type=int, default=None,
+                        help='Should I try to infer labels? Specify index of entry in the file contains the label info.\
+                        (eg: wild-type) Names are not resolved if no argument given.')
     parser.add_argument('--litter_info_entry_idx', default=None, metavar='Row/column with litter info', type=int,
                         help='Which initial entry in the file contains the litter info? (eg: litter 1)')
     args = parser.parse_args()

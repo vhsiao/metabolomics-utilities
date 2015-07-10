@@ -6,6 +6,7 @@ import sys
 sys.path.extend([dirname(dirname(__file__))])
 
 from name_map_utils import NameMap, default_map_pkl_path
+from name_map_utils import standard_name, pubchem, hmdb, kegg
 
 label_map = {
     'wt': ['wt', 'wild'],  # wild type
@@ -15,8 +16,10 @@ label_map = {
 
 label_numbers = {'wt': 1, 'he': 2, 'ho': 3, 'unknown': 99}
 
+
 def prep_dataset(data_csv_path, num_metadata_fields, label_info_field_idx, data_organized_in='cols',
-                 litter_info_field_idx=None, map_pkl_path=default_map_pkl_path, resolve_names=True):
+                 litter_info_field_idx=None, map_pkl_path=default_map_pkl_path, resolve_names=True,
+                 id_type=standard_name):
     """
     Prep dataset for metaboanalyst.
     :param data_csv_path: Path to a data csv file.
@@ -37,17 +40,22 @@ def prep_dataset(data_csv_path, num_metadata_fields, label_info_field_idx, data_
         if data_organized_in == 'rows':
             dataset = zip(*dataset)  # first pivot data if it is in rows. Now each column should contain one sample.
 
-        # Grab the sample metadata entries from the source file. Discard the first column ('Sample Name', etc).
-        sample_metadata = [row[1:] for row in dataset[:num_metadata_fields]]
-        sample_names, sample_labels = consolidate_sample_metadata(
-            sample_metadata, label_info_field_idx, litter_info_field_idx)
+        raw_metadata = [row[1:] for row in dataset[:num_metadata_fields]]
+        if label_info_field_idx is not None:
+            # Grab the sample metadata entries from the source file. Discard the first column ('Sample Name', etc).
+            metadata_keys = ['Sample', 'Label']
+            metadata = consolidate_sample_metadata(raw_metadata, label_info_field_idx, litter_info_field_idx)
+        else:
+            # Copy the metadata rows as they are.
+            metadata_keys = [row[0] for row in dataset[:num_metadata_fields]]
+            metadata = raw_metadata
 
         # Standardize compound names using the name map
         compound_names = [row[0] for row in dataset[num_metadata_fields:]]
         if resolve_names:
-            standardized_compound_names = standardize_compound_names(compound_names, map_pkl_path=map_pkl_path)
+            resolved = standardized_compound_names(compound_names, map_pkl_path=map_pkl_path, id_type=id_type)
         else:
-            standardized_compound_names = compound_names
+            resolved = compound_names
 
         # Clean up the data values
         values = zip(*[row[1:] for row in dataset[num_metadata_fields:]])
@@ -55,12 +63,12 @@ def prep_dataset(data_csv_path, num_metadata_fields, label_info_field_idx, data_
 
     dest_path = '{0}_MA{1}'.format(*splitext(data_csv_path))
     with open(dest_path, 'w+') as destination:
-        fieldnames = ['Sample', 'Label'] + standardized_compound_names
+        fieldnames = metadata_keys + resolved
         writer = csv.DictWriter(destination, fieldnames=fieldnames)
         writer.writeheader()
         for i in range(len(cleaned_values)):
             rowdict = {field: value for field, value in zip(
-            fieldnames, [sample_names[i], str(sample_labels[i])] + cleaned_values[i])}
+                fieldnames, [str(metadata_entry[i]) for metadata_entry in metadata] + cleaned_values[i])}
             writer.writerow(rowdict)
 
 def consolidate_sample_metadata(sample_metadata, label_info_entry_idx, litter_info_entry_idx=None):
@@ -124,20 +132,21 @@ def infer_label(label_entry):
         label = 'unknown'
     return label
 
-def standardize_compound_names(original_names, map_pkl_path=default_map_pkl_path):
+def standardized_compound_names(original_names, map_pkl_path=default_map_pkl_path, id_type=standard_name):
     """
     :param original_names: A list of original field names to be standardized
     :param map_pkl_path: Path to a pkl file containing mappings used to standardize the names
     :return: A list of standardized field names
     """
-    print 'Standardizing names...'
+    print 'Standardizing names to: {0}'.format(id_type)
     name_map = NameMap(map_pkl_path)
     standardized = original_names
     for i in range(len(standardized)):
         name = _strip_suffix(standardized[i])
         if name in name_map:
-            print '{0} --> {1}'.format(name, name_map[name])
-            standardized[i] = name_map[name]
+            new_id = name_map[name][id_type] if id_type in name_map[name] else name
+            print '{0} --> {1}'.format(standardized[i], new_id)
+            standardized[i] = new_id
         else:
             standardized[i] = name
     return standardized
@@ -148,7 +157,7 @@ def clean_values(values):
     :param values: 2D array of data values. Example: [1, 'N/A', '2], [3, 4, 5]
     :return: 2D array of cleaned data values. Example: [1, '', 2], [3, 4, 5]
     """
-    unwanted_values = ['N/A', 'Unknown', 'NaN']
+    unwanted_values = ['N/A', 'Unknown', 'NaN', 'NA']
     return [['' if x in unwanted_values else x for x in row] for row in values]
 
 def _strip_suffix(name):
